@@ -2,15 +2,15 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
-import Tasks from './pages/task';
+import Employee from './pages/Employee';
 
 const Routes: React.FC = () => {
   return (
     <Switch>
-      <Route path="/" exact component={ Home} />
-      <Route path = "/tarefas" exact component={Tasks} />
+      <Route path="/" exact component={Home} />
+      <Route path="/employee" exact component={Employee} />
     </Switch>
-  )
+  );
 }
 
 export default Routes;
