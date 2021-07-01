@@ -7,8 +7,8 @@ const Header: React.FC = () => {
     <Navbar bg="dark" variant="dark" expand="lg">
       <Navbar.Brand href="#home">
         <Image
-            fluid
-            src="./nutcache-logo.png"
+          fluid
+            src="/images/nutcache-logo.png"
             alt="Nutcache Logo"
           />
       </Navbar.Brand>

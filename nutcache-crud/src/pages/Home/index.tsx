@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { Table, Button, Row, Col, Modal } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import api from '../../Services/Api';
 import moment from 'moment';
 import './index.css';
 import AddForm from '../../components/AddForm';
-
+import EditForm from '../../components/EditForm';
 
 interface IEmployee {
   _id: number;
@@ -20,12 +20,15 @@ const Employee: React.FC = () => {
   const { REACT_APP_API_KEY: API_KEY } = process.env;
 
   const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-
+  const handleShowAdd = () => setShow(true);
+  const handleCloseAdd = () => setShow(false);
+  
   useEffect(() => {
     loademployeeList();
   }, []);
+  useEffect(() => {
+    setEmployeeList(employeeList);
+  }, [employeeList]);
 
   async function loademployeeList() {
     const response = await api.get(`${API_KEY}/nutemployee`);
@@ -33,8 +36,14 @@ const Employee: React.FC = () => {
     setEmployeeList(response.data);
   }
 
+  async function deleteEmployee(_id: number) {
+    const response = await api.delete(`${API_KEY}/nutemployee/${_id}`);
+    const newEmployeers = employeeList.filter((e) => _id !== e._id);
+    setEmployeeList(newEmployeers);
+  }
+
   function formateDate(date: Date) {
-    return moment(date).format('DD/MM/YYYY');
+    return moment(date).format('MM/YYYY');
   }
 
   return (
@@ -43,7 +52,7 @@ const Employee: React.FC = () => {
       <Row>
         <h1 className="listTitle">List of Employees </h1>
         <Button
-          onClick={handleShow}
+          onClick={handleShowAdd}
           className="createEmployeeButton"
           data-toggle="modal"
         >
@@ -70,10 +79,14 @@ const Employee: React.FC = () => {
                 <td>{formateDate(employee.start_date)}</td>
                 <td>{employee.team}</td>
                 <td>
-                  <Button size="sm" variant="info" onClick={handleShow}>
+                  <Button size="sm" variant="info">
                     Edit
                   </Button>{' '}
-                  <Button size="sm" variant="danger" onClick={handleShow}>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => deleteEmployee(employee._id)}
+                  >
                     Delete
                   </Button>{' '}
                 </td>
@@ -90,7 +103,7 @@ const Employee: React.FC = () => {
             <AddForm />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={handleClose} variant="secondary">
+            <Button onClick={handleCloseAdd} variant="secondary">
               Close
             </Button>
           </Modal.Footer>
