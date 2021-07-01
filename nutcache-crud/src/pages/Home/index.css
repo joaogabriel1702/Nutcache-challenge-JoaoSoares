@@ -1,0 +1,15 @@
+.createEmployeeButton {
+  position: relative !important;
+  justify-content: right !important;
+  margin-right: 0 !important;
+  margin-left: auto !important;
+  max-width: 10vw !important;
+}
+
+.listTitle {
+  position: relative !important;
+  justify-content: left !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  margin-top: 5vh !important;
+}
