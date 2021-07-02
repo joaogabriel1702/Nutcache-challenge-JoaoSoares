@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Row, Col, Modal } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import api from '../../Services/Api';
@@ -22,7 +22,11 @@ const Employee: React.FC = () => {
   const [show, setShow] = useState(false);
   const handleShowAdd = () => setShow(true);
   const handleCloseAdd = () => setShow(false);
-  
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleShowEdit = () => setShowEdit(true);
+  const handleCloseEdit = () => setShowEdit(false);
+
   useEffect(() => {
     loademployeeList();
   }, []);
@@ -41,6 +45,14 @@ const Employee: React.FC = () => {
     const newEmployeers = employeeList.filter((e) => _id !== e._id);
     setEmployeeList(newEmployeers);
   }
+
+  const updateEmployee = (_id: number, updateEmployee: any) => {
+    setEmployeeList(
+      employeeList.map((employee) =>
+        employee._id === _id ? updateEmployee : employee
+      )
+    );
+  };
 
   function formateDate(date: Date) {
     return moment(date).format('MM/YYYY');
@@ -79,7 +91,13 @@ const Employee: React.FC = () => {
                 <td>{formateDate(employee.start_date)}</td>
                 <td>{employee.team}</td>
                 <td>
-                  <Button size="sm" variant="info">
+                  <Button
+                    size="sm"
+                    variant="info"
+                    className="createEmployeeButton"
+                    data-toggle="modal"
+                    onClick={handleShowEdit}
+                  >
                     Edit
                   </Button>{' '}
                   <Button
@@ -104,6 +122,20 @@ const Employee: React.FC = () => {
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={handleCloseAdd} variant="secondary">
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={showEdit}>
+          <Modal.Header>
+            <Modal.Title>Update Employee Info</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EditForm employeeList={ Employee }/>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={handleCloseEdit} variant="secondary">
               Close
             </Button>
           </Modal.Footer>
